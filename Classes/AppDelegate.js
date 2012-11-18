@@ -13,7 +13,7 @@ cc.AppDelegate = cc.Application.extend({
         var director = cc.Director.sharedDirector();
         director.setDisplayFPS(false);
         director.setAnimationInterval(1.0 / 60);
-        var scene = PirateRiot.scene();
+        var scene = GameScene.scene();
         director.runWithScene(scene);
         return true;
     },
