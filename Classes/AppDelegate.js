@@ -10,11 +10,16 @@ cc.AppDelegate = cc.Application.extend({
     },
 
     applicationDidFinishLaunching:function () {
+    
         var director = cc.Director.sharedDirector();
         director.setDisplayFPS(false);
         director.setAnimationInterval(1.0 / 60);
+        
         var scene = GameScene.scene();
         director.runWithScene(scene);
+        
+        dpad.setup();
+        
         return true;
     },
 

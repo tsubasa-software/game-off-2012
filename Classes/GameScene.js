@@ -14,18 +14,18 @@ var GameScene = cc.Layer.extend({
         this.addChild(this.helloLabel);
         
         this.schedule(this.update);
-        
         return true;
         
         
     },
     
     update:function(dt){
+	    dpad.update();
 	    
-    },
-    
-    onKeyDown:function(e){
-        console.log("key event")
+	    if(dpad.keys.up.state == dpad.stateKeyDown){
+		    console.log("Up Down!");
+	    }
+	    
     }
 
 });
