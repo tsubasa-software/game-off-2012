@@ -1,31 +1,56 @@
 
 var GameScene = cc.Layer.extend({
 
-    helloLabel:null,
-   
+    waves: null,
+    wavesBG: null,
+    sky: null,
+    boat: null,
     
     init:function () {
 
         this._super();
         
         var size = cc.Director.sharedDirector().getWinSize();
-        this.helloLabel = cc.LabelTTF.create("Game layarrr!", "Arial", 28);
-        this.helloLabel.setPosition(cc.ccp(size.width / 2, size.height - 40));
-        this.addChild(this.helloLabel);
+        
+        this.sky = new Sky();
+        this.sky.setPosition(cc.ccp(0, 30));
+        this.addChild(this.sky);
+        
+        this.wavesBG = new WaterBG();
+        this.wavesBG.setPosition(cc.ccp(0, -12));
+        this.addChild(this.wavesBG);
+        
+        this.boat = new Boat();
+        this.boat.setPosition(cc.ccp(0,0));
+        this.addChild(this.boat);
+        
+        var upDownAction = cc.RepeatForever.create(
+        						cc.Sequence.create(
+        							cc.EaseOut.create(cc.MoveBy.create(.92, cc.ccp(0,10)),1.2),
+        							cc.EaseOut.create(cc.MoveBy.create(.92, cc.ccp(0,-10)),1.2)
+        						));
+        this.boat.runAction(upDownAction);
+        
+        this.waves = new Water();
+        this.waves.setPosition(cc.ccp(0, 0));
+        this.addChild(this.waves);
         
         this.schedule(this.update);
         return true;
         
-        
     },
     
     update:function(dt){
-	    dpad.update();
 	    
-	    if(dpad.keys.up.state == dpad.stateKeyDown){
-		    console.log("Up Down!");
+	    
+	    if(dpad.keys.left.state == dpad.stateKeyPressed){
+		    this.boat.capn.setPosition(cc.ccp(this.boat.capn._position.x-1,this.boat.capn._position.y));
+	    }else if(dpad.keys.right.state == dpad.stateKeyPressed){
+		    this.boat.capn.setPosition(cc.ccp(this.boat.capn._position.x+1,this.boat.capn._position.y));
 	    }
 	    
+	    
+	    dpad.update();
     }
 
 });

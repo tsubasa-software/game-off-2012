@@ -13,7 +13,10 @@ cc.AppDelegate = cc.Application.extend({
     
         var director = cc.Director.sharedDirector();
         director.setDisplayFPS(false);
-        director.setAnimationInterval(1.0 / 60);
+        director.setAnimationInterval(1.0/32.0);
+        
+        var spriteCache = cc.SpriteFrameCache.sharedSpriteFrameCache();
+        spriteCache.addSpriteFramesWithFile("Resources/pm.plist", "Resources/pm.png");
         
         var scene = GameScene.scene();
         director.runWithScene(scene);
