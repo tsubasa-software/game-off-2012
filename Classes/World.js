@@ -1,3 +1,67 @@
+// CLOUDS
+var Clouds = function(){
+	
+	var size = cc.Director.sharedDirector().getWinSize();
+	var node = new cc.Node();
+	var tileSizeW = 80;
+	var tileSizeH = 60;
+	var cloudsPattern = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0],
+						 [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0],
+						 [0,0,0,3,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,2,0,0],
+						 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0],
+						 [2,1,0,0,0,0,3,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,3,1,0,0,0,0,0,0,0,0,0,0,3,2,0,0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,0,0,0,0,0],
+						 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1],
+						 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+						 [3,2,3,0,0,0,0,3,2,2,3,0,0,0,0,3,2,2,0,3,2,0,0,0,0,2,0,0,2,3,2,0,0,3,2,0,3,0,2,2,3,0,0,0,3,0,2,0,2,2,0,3,0,0,2,3,3,2,0,2,3,2,3,0,3,0,2,3,3,0,0,0,0,2,0,0,3,0,0,2,0,0,0,0,0]];
+						 
+	var maxi = cloudsPattern.length;
+	var maxj = cloudsPattern[0].length;
+	
+	for(var i = 0; i < maxi; i++){
+		
+		var cloudNode = new cc.Node();
+		
+		for(var j = 0; j < maxj; j++){	
+			var tileState = cloudsPattern[i][j];
+			if(tileState){
+				
+				// CLOUD
+				var cloudFrame = cc.SpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName("cloud0"+tileState+".png");
+			    var aCloud = new cc.Sprite();
+			    aCloud.initWithSpriteFrame(cloudFrame);
+			    aCloud.setPosition(cc.ccp(j*tileSizeW,0));
+			    aCloud.setAnchorPoint(cc.ccp(0, 1));
+			    cloudNode.addChild(aCloud);
+			    
+			}
+		}
+		
+		cloudNode.setContentSize(cc.SizeMake(maxj*tileSizeW, tileSizeH));
+		cloudNode.setPosition(cc.ccp(0,maxi*tileSizeH-i*tileSizeH));
+		cloudNode.setAnchorPoint(cc.ccp(0, 0));
+		
+		
+		var moveAction = cc.RepeatForever.create(
+		cc.Sequence.create(
+			cc.MoveBy.create(maxj*(1.2*(i+1)), cc.ccp((maxj*tileSizeW+size.width)*-1, 0)),
+			cc.CallFunc.create(this, function(){
+				cloudNode.setPosition(cc.ccp(size.width,cloudNode._position.y));
+			})
+			)
+		);
+	
+		cloudNode.runAction(moveAction);
+		node.addChild(cloudNode);
+		
+	}
+	
+	node.setContentSize(cc.SizeMake(maxj*tileSizeW, maxi*tileSizeH));
+	
+	return node;
+	
+}
+
+
 // BOAT
 
 var Boat = function(){
@@ -131,7 +195,7 @@ var WaterBG = function(){
 var WaterTileBG = cc.Sprite.extend({
 	init: function(){
 		this._super();
-		var animationAction = setupSpriteAnimation("background_wave", 6);
+		var animationAction = setupSpriteAnimationWithCustomDelay("background_wave", 6, .22);
 		this.runAction(animationAction);
 	}
 });

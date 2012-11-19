@@ -19,8 +19,7 @@ var RepeatXSprite = cc.Node.extend({
 	
 });
 
-
-var setupSpriteAnimation = function(imageName, frames){
+var setupSpriteAnimationWithCustomDelay = function(imageName, frames, perFrameDelay){
 		
 	var animFrames = [];
     var str = "";
@@ -30,7 +29,7 @@ var setupSpriteAnimation = function(imageName, frames){
         animFrames.push(frame);
     }
    
-    var animation = cc.Animation.create(animFrames, 0.15);
+    var animation = cc.Animation.create(animFrames, perFrameDelay);
     cc.AnimationCache.sharedAnimationCache().addAnimation(animation, imageName);
 		
 	// RUN ANIMATION
@@ -40,5 +39,10 @@ var setupSpriteAnimation = function(imageName, frames){
     var repeat = cc.RepeatForever.create(animN);
 	return repeat;
     
+};
+
+
+var setupSpriteAnimation = function(imageName, frames){
+	return setupSpriteAnimationWithCustomDelay(imageName, frames, .15);
 };
 

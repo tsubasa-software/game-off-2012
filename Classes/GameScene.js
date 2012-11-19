@@ -4,6 +4,7 @@ var GameScene = cc.Layer.extend({
     waves: null,
     wavesBG: null,
     sky: null,
+    clouds: null,
     boat: null,
     
     init:function () {
@@ -16,8 +17,13 @@ var GameScene = cc.Layer.extend({
         this.sky.setPosition(cc.ccp(0, 30));
         this.addChild(this.sky);
         
+        this.clouds = new Clouds();
+        this.clouds.setAnchorPoint(cc.ccp(0, 1));
+        this.clouds.setPosition(cc.ccp(0, size.height+16));
+        this.addChild(this.clouds);        
+        
         this.wavesBG = new WaterBG();
-        this.wavesBG.setPosition(cc.ccp(0, -12));
+        this.wavesBG.setPosition(cc.ccp(0, -16));
         this.addChild(this.wavesBG);
         
         this.boat = new Boat();
