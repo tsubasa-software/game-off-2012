@@ -19,7 +19,7 @@ var GameScene = cc.Layer.extend({
         
         this.clouds = new Clouds();
         this.clouds.setAnchorPoint(cc.ccp(0, 1));
-        this.clouds.setPosition(cc.ccp(0, size.height+16));
+        this.clouds.setPosition(cc.ccp(0, size.height-10));
         this.addChild(this.clouds);        
         
         this.wavesBG = new WaterBG();
@@ -48,13 +48,17 @@ var GameScene = cc.Layer.extend({
     
     update:function(dt){
 	    
-	    
-	    if(dpad.keys.left.state == dpad.stateKeyPressed){
-		    this.boat.capn.setPosition(cc.ccp(this.boat.capn._position.x-1,this.boat.capn._position.y));
+	    if(dpad.keys.up.state == dpad.stateKeyDown){
+			this.boat.capn.jump();	    	
+	    }else if(dpad.keys.down.state == dpad.stateKeyPressed){
+	    	this.boat.capn.crouch();
+	    }else if(dpad.keys.left.state == dpad.stateKeyPressed){
+		    this.boat.capn.walkLeft();
 	    }else if(dpad.keys.right.state == dpad.stateKeyPressed){
-		    this.boat.capn.setPosition(cc.ccp(this.boat.capn._position.x+1,this.boat.capn._position.y));
+		    this.boat.capn.walkRight();
+	    }else{
+		    this.boat.capn.wait();
 	    }
-	    
 	    
 	    dpad.update();
     }

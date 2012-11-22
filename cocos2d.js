@@ -48,10 +48,11 @@ cc.loadjs = function (filename) {
 };
 
 cc.loadjs('Lib/Cocos2d-html5-canvasmenu-min.js');
+cc.loadjs('Classes/PirateMutiny.js');
 cc.loadjs('Classes/AppDelegate.js');
 cc.loadjs('Classes/dpad.js');
 cc.loadjs('Classes/GameScene.js');
 cc.loadjs('Classes/Capn.js');
 cc.loadjs('Classes/World.js');
 cc.loadjs('Classes/SpriteUtils.js');
-cc.loadjs('Classes/PirateMutiny.js');
+

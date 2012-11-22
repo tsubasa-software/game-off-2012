@@ -19,8 +19,9 @@ var RepeatXSprite = cc.Node.extend({
 	
 });
 
-var setupSpriteAnimationWithCustomDelay = function(imageName, frames, perFrameDelay){
-		
+
+var addFBFSpriteAnimationToCache = function (imageName, frames, perFrameDelay, finalName){
+
 	var animFrames = [];
     var str = "";
     for (var i = 1; i <= frames; i++) {
@@ -30,7 +31,13 @@ var setupSpriteAnimationWithCustomDelay = function(imageName, frames, perFrameDe
     }
    
     var animation = cc.Animation.create(animFrames, perFrameDelay);
-    cc.AnimationCache.sharedAnimationCache().addAnimation(animation, imageName);
+    cc.AnimationCache.sharedAnimationCache().addAnimation(animation, finalName);
+	
+}
+
+var setupSpriteAnimationWithCustomDelay = function(imageName, frames, perFrameDelay){
+		
+    addFBFSpriteAnimationToCache(imageName,frames,perFrameDelay,imageName);
 		
 	// RUN ANIMATION
 	var animCache = cc.AnimationCache.sharedAnimationCache();

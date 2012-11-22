@@ -2,13 +2,14 @@
 var PM = PM || {};
 
 PM.PLAYER_STATE = {
-	WAITING:0,
-	WALK_LEFT:1,
-	WALK_RIGHT:2,
-	JUMP:3,
-	LOWER:4,
-	HIT:5,
-	DEAD:6
+	UNKNOWN:	0,
+	WAITING:	1,
+	WALK_LEFT:	2,
+	WALK_RIGHT:	3,
+	JUMP:		4,
+	CROUCH:		5,
+	HIT:		6,
+	DEAD:		7
 }
 
 PM.GAME_SCENE = {
