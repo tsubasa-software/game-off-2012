@@ -55,4 +55,5 @@ cc.loadjs('Classes/GameScene.js');
 cc.loadjs('Classes/Capn.js');
 cc.loadjs('Classes/World.js');
 cc.loadjs('Classes/SpriteUtils.js');
+cc.loadjs('Classes/EngineUtils.js');
 

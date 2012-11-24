@@ -84,8 +84,15 @@ var Boat = function(){
     // CAPN
     var capn = Capn.spriteWithSpriteFrameName("capn_idle01.png");
     capn.setAnchorPoint(cc.ccp(0, 0));
-    capn.setPosition(cc.ccp(280, 202));
+    capn.setPosition(cc.ccp(380, 202));
     node.addChild(capn);
+    
+    capn.didDie = function(){
+    
+    	var capnPosition = capn.getPosition();
+    	var capnSize = capn.getContentSize();
+	    node.addChild(addWaterDrops(cc.ccp(capnPosition.x+capnSize.width/2,capnPosition.y+capnSize.height/2), 15+rnd(5)));
+    }
     
     // PLANK
     var plankFrame = cc.SpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName("plank01.png");
@@ -204,3 +211,37 @@ WaterTileBG.spriteWithSpriteFrameName = function (spriteFrameName) {
     sprite.initWithSpriteFrame(pFrame);
     return sprite;
 };
+
+
+
+// WaterDrops
+var addWaterDrops = function(origin, count){
+	
+	var node = cc.Node.create();
+	
+	for( var i = 0; i < count; i++){
+		var drop = new WaterDrop(origin);
+		node.addChild(drop);
+	}
+	
+	var wait		= cc.DelayTime.create(1.2);
+	var autoRemove  = cc.CallFunc.create(node, function(){
+	   this._parent.removeChild(this);
+    });
+	
+	node.runAction(cc.Sequence.create(wait,autoRemove));	
+	return node;
+}
+
+var WaterDrop = function(origin){
+	
+	var pFrame = cc.SpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName("waterdrop0"+rnd(2)+".png");
+    var sprite = new cc.Sprite();
+    sprite.initWithSpriteFrame(pFrame);
+    sprite.setPosition(origin);
+    
+    var jump = cc.JumpBy.create(.6+(rnd(5)/10), cc.ccp((rnd(120)-20)*3,-60), 50+rnd(100), 1);
+    sprite.runAction(jump);
+	
+	return sprite;
+}
