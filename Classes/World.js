@@ -212,8 +212,6 @@ WaterTileBG.spriteWithSpriteFrameName = function (spriteFrameName) {
     return sprite;
 };
 
-
-
 // WaterDrops
 var addWaterDrops = function(origin, count){
 	

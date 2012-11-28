@@ -37,7 +37,8 @@ cc.loadjs = function (filename) {
 			
             cc.Loader.shareLoader().preload([
                 {type:"plist", src:"Resources/pm.plist"},
-                {type:"image", src:"Resources/pm.png"}
+                {type:"image", src:"Resources/pm.png"},
+                {type:"image", src:"Resources/hitArea.png"}
             ]);
         }
     };
@@ -56,4 +57,5 @@ cc.loadjs('Classes/Capn.js');
 cc.loadjs('Classes/World.js');
 cc.loadjs('Classes/SpriteUtils.js');
 cc.loadjs('Classes/EngineUtils.js');
+cc.loadjs('Classes/Rebels.js');
 

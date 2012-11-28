@@ -18,3 +18,11 @@ PM.GAME_SCENE = {
 	RESULTS:2,
 	HISCORE:3
 }
+
+
+PM.REBEL_TYPE = {
+	UNKNOWN:	0,
+	BOTTLE:		1
+}
+
+PM.DEBUG = false;

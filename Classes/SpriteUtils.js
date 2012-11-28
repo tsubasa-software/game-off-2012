@@ -53,3 +53,22 @@ var setupSpriteAnimation = function(imageName, frames){
 	return setupSpriteAnimationWithCustomDelay(imageName, frames, .15);
 };
 
+
+var addHitArea = function(_sprite, w, h, _dx, _dy){
+	var hitArea = new cc.Sprite.create("Resources/hitArea.png", cc.RectMake(0, 0, w, h));
+    hitArea.setPosition(cc.ccp(_sprite.getContentSize().width/2+_dx, _sprite.getContentSize().height/2+_dy));
+    _sprite.addChild(hitArea);
+    _sprite.hitArea = hitArea;
+    
+    if(!PM.DEBUG) hitArea.setOpacity(0);
+    else hitArea.setOpacity(120);
+}
+
+var editHitArea = function(_sprite, w, h, _dx, _dy){
+	var hitArea = _sprite.hitArea;
+	if(hitArea){
+		hitArea.setTextureRect(cc.RectMake(0,0,w,h));
+    	hitArea.setPosition(cc.ccp(_sprite.getContentSize().width/2 + _dx, _sprite.getContentSize().height/2 + _dy));
+    }
+}
+
