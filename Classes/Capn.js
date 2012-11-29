@@ -193,7 +193,7 @@ var Capn = cc.Sprite.extend({
 		var animCache = cc.AnimationCache.sharedAnimationCache();
 	    var animN = cc.Animate.create(animCache.animationByName("capnHit"));
 			
-		var jump = cc.JumpTo.create(0.4, cc.ccp(this._position.x+20,202), 40, 1);
+		var jump = cc.JumpTo.create(0.4, cc.ccp(this._position.x+30,202), 40, 1);
 			
 		var action = cc.CallFunc.create(this, function(){
 			this.state = PM.PLAYER_STATE.UNKNOWN;

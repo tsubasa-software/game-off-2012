@@ -22,7 +22,10 @@ PM.GAME_SCENE = {
 
 PM.REBEL_TYPE = {
 	UNKNOWN:	0,
-	BOTTLE:		1
+	BOTTLE:		1,
+	EARL:		2,
+	CARL:		3
+	
 }
 
 PM.DEBUG = false;

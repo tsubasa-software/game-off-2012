@@ -41,7 +41,7 @@ var GameScene = cc.Layer.extend({
         this.rebels = Rebels(this);
         this.rebels.node.setPosition(cc.ccp(0,220));
         this.rebels.node.setAnchorPoint(cc.ccp(0,0.5));
-        this.addChild(this.rebels.node);
+        this.boat.addChild(this.rebels.node);
         
         this.waves = new Water();
         this.waves.setPosition(cc.ccp(0, 0));
@@ -55,7 +55,7 @@ var GameScene = cc.Layer.extend({
     
     update:function(dt){
 	    
-	    this.rebels.update();
+	    this.rebels.update(dt);
 	    
 	    if(dpad.keys.up.state == dpad.stateKeyDown){
 			this.boat.capn.jump();	    	
@@ -71,12 +71,10 @@ var GameScene = cc.Layer.extend({
 	    
 	    dpad.update();
 	    
-	    if(rnd(100) == 4){
-		   this.rebels.addRandomRebel();
-	    }
     }
 
 });
+
 
 GameScene.scene = function () {
     var scene = cc.Scene.create();

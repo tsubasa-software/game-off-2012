@@ -238,7 +238,7 @@ var WaterDrop = function(origin){
     sprite.initWithSpriteFrame(pFrame);
     sprite.setPosition(origin);
     
-    var jump = cc.JumpBy.create(.6+(rnd(5)/10), cc.ccp((rnd(120)-20)*3,-60), 50+rnd(100), 1);
+    var jump = cc.JumpBy.create(.6+(rnd(5)/10), cc.ccp((rnd(120)-40)*3,-60), 50+rnd(100), 1);
     sprite.runAction(jump);
 	
 	return sprite;
