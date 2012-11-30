@@ -12,6 +12,8 @@ var GameScene = cc.Layer.extend({
     scoreLabel: null,
     score: 0,
     
+    gameOverLayer: null,
+    
     state: PM.GAME_SCENE.UNKNOWN,
     
     init:function () {
@@ -78,8 +80,6 @@ var GameScene = cc.Layer.extend({
         this.addChild(clickToPlayLabel);
         
         this.schedule(this.update);
-        
-        this.state = PM.GAME_SCENE.MENU;
         this.setPosition(cc.ccp(-size.width, 0));
         
         var canvasTag = cc.$('gameCanvas');
@@ -87,6 +87,8 @@ var GameScene = cc.Layer.extend({
         gameCanvas.onmouseup = function(){
 	        self.changeState(PM.GAME_SCENE.GAME);
         }
+        
+        
         
         return true;
         
@@ -104,6 +106,10 @@ var GameScene = cc.Layer.extend({
     },
     
     changeState: function(_newstate){
+    
+    	if(this.state == PM.GAME_SCENE.UNKNOWN && _newstate == PM.GAME_SCENE.MENU){
+    		this.gameOverLayer.setIsVisible(false);
+    	}
     	
     	if(this.state == PM.GAME_SCENE.MENU && _newstate == PM.GAME_SCENE.GAME){
     		
@@ -164,12 +170,70 @@ var GameScene = cc.Layer.extend({
 
 });
 
+var GameOverLayer = cc.LayerColor.extend({
+	
+	gameLogo: null,
+	scoreLabel: null,
+	scoreLabel: null,
+	hiscoreLabel: null,
+	leaderbordsLabel: null,
+	winnersLabels: [],
+	
+	totalScore: 0,
+	
+	setup: function() {
+
+		var size = cc.Director.sharedDirector().getWinSize();
+		
+	   //LOGO AND INFO
+   	this.gameLogo = new GameLogo();
+   	this.gameLogo.setPosition(cc.ccp(size.width/2, 380));
+   	this.addChild(this.gameLogo);
+   	
+		this.scoreLabel = cc.LabelBMFont.create("THIS SESSION SCORE: 2300", "Resources/derp.fnt");
+		this.scoreLabel.setPosition(cc.ccp(130, 200+30));
+		this.scoreLabel.setAnchorPoint(cc.ccp(0,0));
+		this.addChild(this.scoreLabel);
+   	 		   	
+		this.hiscoreLabel = cc.LabelBMFont.create("LOCAL HI-SCORE: 18230", "Resources/derp.fnt");
+		this.hiscoreLabel.setPosition(cc.ccp(130, 175+30));
+		this.hiscoreLabel.setAnchorPoint(cc.ccp(0,0));
+		this.addChild(this.hiscoreLabel);
+ 		
+ 		this.leaderbordsLabel = cc.LabelBMFont.create("- LEADERBOARDS -", "Resources/derp.fnt");
+		this.leaderbordsLabel.setPosition(cc.ccp(size.width/2, 182));
+		this.addChild(this.leaderbordsLabel);
+ 		
+ 		for( var i = 0; i < 5; i ++){
+ 			
+ 			var wLabel = cc.LabelBMFont.create((i+1)+". LUM ... 32000", "Resources/derp.fnt");
+			wLabel.setPosition(cc.ccp(size.width/2, 115-(28*i)));
+			wLabel.setAnchorPoint(cc.ccp(.5,0));
+ 			
+ 			this.winnersLabels.push(wLabel);
+ 			this.addChild(wLabel);
+ 			
+ 		}
+ 		
+	}
+
+});
 
 GameScene.scene = function () {
-    var scene = cc.Scene.create();
-    var layer = this.node();
-    scene.addChild(layer);
-    return scene;
+	
+	var scene = cc.Scene.create();
+	var layer = this.node();
+	scene.addChild(layer);		
+
+ 	var gameOverLayer = new GameOverLayer();
+ 	gameOverLayer.initWithColor(cc.ccc4(255, 255, 255, 255));
+ 	gameOverLayer.setup();
+	scene.addChild(gameOverLayer);
+	
+	layer.gameOverLayer = gameOverLayer;
+	layer.changeState(PM.GAME_SCENE.MENU);
+    
+   return scene;
 };
 
 GameScene.node = function () {
@@ -177,4 +241,5 @@ GameScene.node = function () {
     if (ret && ret.init())  return ret;
     return null;
 };
+
 
