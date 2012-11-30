@@ -6,6 +6,7 @@ var Capn = cc.Sprite.extend({
 	crouchHitArea: {w:30,h:30,dx:0,dy:-40},
 	lifeMeter: null,
 	lifes: 5,
+	world: null,
 	
 	init: function(){
 		this._super();
@@ -184,7 +185,11 @@ var Capn = cc.Sprite.extend({
 		
 		var goDown = cc.MoveBy.create(.3, cc.ccp(0,-86));
 		
-		var sequence = cc.Sequence.create(jumpAndRotateAnm, endCallback, goDown);
+		var gameoverCallback = cc.CallFunc.create(this, function(){
+			this.world.changeState(PM.GAME_SCENE.GAMEOVER);
+		});
+		
+		var sequence = cc.Sequence.create(jumpAndRotateAnm, endCallback, goDown, gameoverCallback);
 		
 		this.stopAllActions();
 		this.runAction(sequence);

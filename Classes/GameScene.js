@@ -37,6 +37,7 @@ var GameScene = cc.Layer.extend({
         
         this.boat = new Boat();
         this.boat.setPosition(cc.ccp(0,0));
+        this.boat.capn.world = this;
         this.addChild(this.boat);
         
         var upDownAction = cc.RepeatForever.create(
@@ -86,9 +87,10 @@ var GameScene = cc.Layer.extend({
         var self = this;
         gameCanvas.onmouseup = function(){
 	        self.changeState(PM.GAME_SCENE.GAME);
+	        if(self.state == PM.GAME_SCENE.GAMEOVER){
+	        	window.location.reload();
+	        }
         }
-        
-        
         
         return true;
         
@@ -107,8 +109,11 @@ var GameScene = cc.Layer.extend({
     
     changeState: function(_newstate){
     
+    	var size = cc.Director.sharedDirector().getWinSize();
+    
     	if(this.state == PM.GAME_SCENE.UNKNOWN && _newstate == PM.GAME_SCENE.MENU){
-    		this.gameOverLayer.setIsVisible(false);
+    		this.state = PM.GAME_SCENE.MENU;
+    		this.gameOverLayer.setPosition(cc.ccp(0,size.height));
     	}
     	
     	if(this.state == PM.GAME_SCENE.MENU && _newstate == PM.GAME_SCENE.GAME){
@@ -141,17 +146,33 @@ var GameScene = cc.Layer.extend({
     		
     	}
     	
+    	if(this.state == PM.GAME_SCENE.GAME && _newstate == PM.GAME_SCENE.GAMEOVER){
+    		
+    		this.state = PM.GAME_SCENE.GAME2GAMEOVER;
+    		this.gameOverLayer.totalScore = this.score;
+    		
+    		var wait		= cc.DelayTime.create(1.0);
+    		var move		= cc.EaseSineInOut.create(cc.MoveTo.create(0.8, cc.ccp(0,0)));
+    		var onFadeEnd 	= cc.CallFunc.create(this, function () {
+    			this.rebels.node.removeAllChildrenWithCleanup(false);
+		   		this.state = PM.GAME_SCENE.GAMEOVER;
+    		});
+    		
+    		this.gameOverLayer.stopAllActions();
+    		this.gameOverLayer.runAction(cc.Sequence.create(wait,move, onFadeEnd));
+    		
+    	}
+    	
     },
     
     updateScore: function(_new){
 	    this.score += _new;
 	    this.scoreLabel.setString("SCORE: " + zeroFill(this.score,5));
-	    
     },
     
     update:function(dt){
 	    
-	    if(this.state == PM.GAME_SCENE.GAME){
+	    if(this.state == PM.GAME_SCENE.GAME || this.state == PM.GAME_SCENE.GAME2GAMEOVER){
 	    
 		    this.rebels.update(dt);
 	    
@@ -190,7 +211,7 @@ var GameOverLayer = cc.LayerColor.extend({
    	this.gameLogo.setPosition(cc.ccp(size.width/2, 380));
    	this.addChild(this.gameLogo);
    	
-		this.scoreLabel = cc.LabelBMFont.create("THIS SESSION SCORE: 2300", "Resources/derp.fnt");
+		this.scoreLabel = cc.LabelBMFont.create("THIS SESSION SCORE: "+totalScore, "Resources/derp.fnt");
 		this.scoreLabel.setPosition(cc.ccp(130, 200+30));
 		this.scoreLabel.setAnchorPoint(cc.ccp(0,0));
 		this.addChild(this.scoreLabel);
@@ -199,7 +220,7 @@ var GameOverLayer = cc.LayerColor.extend({
 		this.hiscoreLabel.setPosition(cc.ccp(130, 175+30));
 		this.hiscoreLabel.setAnchorPoint(cc.ccp(0,0));
 		this.addChild(this.hiscoreLabel);
- 		
+ 		/*
  		this.leaderbordsLabel = cc.LabelBMFont.create("- LEADERBOARDS -", "Resources/derp.fnt");
 		this.leaderbordsLabel.setPosition(cc.ccp(size.width/2, 182));
 		this.addChild(this.leaderbordsLabel);
@@ -214,7 +235,7 @@ var GameOverLayer = cc.LayerColor.extend({
  			this.addChild(wLabel);
  			
  		}
- 		
+ 		*/
 	}
 
 });
