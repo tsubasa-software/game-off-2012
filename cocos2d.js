@@ -38,6 +38,8 @@ cc.loadjs = function (filename) {
             cc.Loader.shareLoader().preload([
                 {type:"plist", src:"Resources/pm.plist"},
                 {type:"image", src:"Resources/pm.png"},
+                {type:"image", src:"Resources/derp.png"},
+                {type:"fnt", src:"Resources/derp.fnt"},
                 {type:"image", src:"Resources/hitArea.png"}
             ]);
         }

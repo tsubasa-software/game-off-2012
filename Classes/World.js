@@ -41,9 +41,9 @@ var Clouds = function(){
 		
 		var moveAction = cc.RepeatForever.create(
 		cc.Sequence.create(
-			cc.MoveBy.create(maxj*(2.0*(i+1)), cc.ccp((maxj*tileSizeW+size.width)*-1, 0)),
+			cc.MoveBy.create(maxj*(2.0*(i+1)), cc.ccp((maxj*tileSizeW+size.width*2)*-1, 0)),
 			cc.CallFunc.create(cloudNode, function(){
-				this.setPosition(cc.ccp(size.width,this._position.y));
+				this.setPosition(cc.ccp(size.width*2,this._position.y));
 			})
 			)
 		);
@@ -84,7 +84,7 @@ var Boat = function(){
     // CAPN
     var capn = Capn.spriteWithSpriteFrameName("capn_idle01.png");
     capn.setAnchorPoint(cc.ccp(0, 0));
-    capn.setPosition(cc.ccp(380, 202));
+    capn.setPosition(cc.ccp(-70, 202));
     node.addChild(capn);
     
     capn.didDie = function(){
@@ -134,7 +134,7 @@ var Sky = function(){
 	var size = cc.Director.sharedDirector().getWinSize();
         
     var sky = new RepeatXSprite();
-    sky.setContentSize(cc.SizeMake(size.width, 450));
+    sky.setContentSize(cc.SizeMake(size.width*2, 450));
     sky.setAnchorPoint(cc.ccp(0, 0));
     sky.build("background_sky.png", SkyTile);
 
@@ -160,7 +160,7 @@ var Water = function(){
 	var size = cc.Director.sharedDirector().getWinSize();
         
     var waves = new RepeatXSprite();
-    waves.setContentSize(cc.SizeMake(size.width, 32));
+    waves.setContentSize(cc.SizeMake(size.width*2, 32));
     waves.setAnchorPoint(cc.ccp(0, 0));
     waves.build("waterwave01.png", WaterTile);
 
@@ -190,7 +190,7 @@ var WaterBG = function(){
 	var size = cc.Director.sharedDirector().getWinSize();
         
     var waves = new RepeatXSprite();
-    waves.setContentSize(cc.SizeMake(size.width, 68));
+    waves.setContentSize(cc.SizeMake(size.width*2, 68));
     waves.setAnchorPoint(cc.ccp(0, 0));
     waves.build("background_wave01.png", WaterTileBG);
 
@@ -242,4 +242,64 @@ var WaterDrop = function(origin){
     sprite.runAction(jump);
 	
 	return sprite;
+}
+
+// GAME LOGO
+var GameLogo = function(){
+	var pFrame = cc.SpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName("game_logo.png");
+    var sprite = new cc.Sprite();
+    sprite.initWithSpriteFrame(pFrame);
+    return sprite;
+}
+
+
+// LifeMeter
+var LifeMeter = function(){
+
+	var self = {};
+	self.node = new cc.Node();
+	
+	var size = cc.Director.sharedDirector().getWinSize();
+	var count = 5;
+	var hw = 34;
+	
+	self.ons = [];
+	self.offs = [];
+	
+	for(var i = 0; i < count; i++){
+	
+		var aHeartOff = Heart(false);
+		aHeartOff.setPosition(cc.ccp((34+5)*i,0));
+		self.node.addChild(aHeartOff);
+		
+		self.offs.push(aHeartOff);
+	
+		var aHeartOn = Heart(true);
+		aHeartOn.setPosition(cc.ccp((34+5)*i,0));
+		self.node.addChild(aHeartOn);
+		
+		self.ons.push(aHeartOn);
+	}
+	
+	self.updateLifeTo = function(_newValue){
+		
+		for(var i = 0; i < count; i++){
+			var aHeartOn = self.ons[i];
+			if(i<_newValue) aHeartOn.setOpacity(255);
+			else aHeartOn.setOpacity(0);
+		}
+		
+	}
+	
+	self.node.setContentSize(cc.SizeMake((34+5)*count),30);
+	
+	return self;
+}
+	
+// HEART
+var Heart = function(_on){
+	var pFrame = cc.SpriteFrameCache.sharedSpriteFrameCache().spriteFrameByName("heart"+(_on?"1":"0")+".png");
+    var sprite = new cc.Sprite();
+    sprite.initWithSpriteFrame(pFrame);
+    return sprite;
 }

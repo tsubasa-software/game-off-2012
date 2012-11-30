@@ -4,6 +4,8 @@ var Capn = cc.Sprite.extend({
 	didDie: null,
 	normalHitArea: {w:30,h:70,dx:0,dy:-10},
 	crouchHitArea: {w:30,h:30,dx:0,dy:-40},
+	lifeMeter: null,
+	lifes: 5,
 	
 	init: function(){
 		this._super();
@@ -16,11 +18,17 @@ var Capn = cc.Sprite.extend({
         addFBFSpriteAnimationToCache("capn_hit", 1,.10,"capnHit");
         
 		this.scheduleUpdate();
-		this.wait();
 		
 		this.setContentSize(cc.SizeMake(80,114));
 		addHitArea(this,this.normalHitArea.w,this.normalHitArea.h,this.normalHitArea.dx,this.normalHitArea.dy);
 		
+	},
+	
+	reset: function(){
+		this.lifes = 5;
+		this.lifeMeter.updateLifeTo(this.lifes);
+		this.stopAllActions();
+		this.state = PM.PLAYER_STATE.UNKNOWN;
 	},
 	
 	update:function(dt){
@@ -193,7 +201,7 @@ var Capn = cc.Sprite.extend({
 		var animCache = cc.AnimationCache.sharedAnimationCache();
 	    var animN = cc.Animate.create(animCache.animationByName("capnHit"));
 			
-		var jump = cc.JumpTo.create(0.4, cc.ccp(this._position.x+30,202), 40, 1);
+		var jump = cc.JumpTo.create(0.4, cc.ccp(this._position.x+40,202), 40, 1);
 			
 		var action = cc.CallFunc.create(this, function(){
 			this.state = PM.PLAYER_STATE.UNKNOWN;
@@ -203,6 +211,9 @@ var Capn = cc.Sprite.extend({
 		var spawn	 = cc.Spawn.create(jump,animN);
 		var sequence = cc.Sequence.create(spawn,action);
 		this.runAction(sequence);
+		
+		this.lifes -= 1;
+		this.lifeMeter.updateLifeTo(this.lifes);
 		
 	}
     

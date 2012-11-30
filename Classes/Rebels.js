@@ -6,12 +6,15 @@ var Rebels = function(_world){
 	self.node 		= new cc.Node();
 	self.cooldown 	= 0;
 	self.frame 		= 0;
+	self.rdnss		= 30;
+	self.level		= 0;
 	self.update 	= function(dt){
 		
 		var capn = self.world.boat.capn;
 		var capnBox = capn.hitArea.boundingBoxToWorld();
 		var list = self.node.getChildren();
-		var level = (~~(self.frame/300.0))+1;
+		self.level = (~~(self.frame/300.0));
+		self.level = self.level > 9 ? 9 : self.level;
 		
 		for(var aRebelIndex in list){
 			var aRebel = list[aRebelIndex];
@@ -27,21 +30,31 @@ var Rebels = function(_world){
 			}
 		}
 		
-		var capnpos = capn.getPosition().x+capn.getContentSize().width;
-		var rdnss 	= capnpos > 100 ? capnpos/10 : 1;
-		rdnss += 100 - level*2;
-		rdnss = rdnss > 1 ? rdnss : 1;
 		
-		if(self.cooldown == 0){
-			if(rnd(rdnss) == 1){
-				self.addRandomRebel(3);
-				self.cooldown = 35;
-			}
-	    }else{
-		    self.cooldown -= 1;
+		if(capn.state != PM.PLAYER_STATE.DEAD){
+			self.rdnss -= 0.2;
+			self.rdnss = self.rdnss > 5 ? ~~(self.rdnss)|0 : 5;
+			
+			if(self.cooldown == 0){
+				if(rnd(self.rdnss) == 1){
+					self.addRandomRebel(3);
+					self.cooldown = 34+(20-this.level);
+				}
+		    }else{
+			    self.cooldown -= 1;
+		    }
 	    }
 	    
 	    self.frame += 1;
+		
+	}
+	
+	self.reset = function(){
+		
+		self.cooldown 	= 0;
+		self.frame 		= 0;
+		self.rdnss		= 30;
+		self.level		= 0;
 		
 	}
 	
@@ -98,8 +111,9 @@ var CarlRebel = BaseRebel.extend({
 		
 			var capn = this.gang.world.boat.capn;
 			if(capn.getPosition().x - this._position.x > 70){
-				this.setPosition(cc.ccp(this._position.x+5, this._position.y));
+				this.setPosition(cc.ccp(this._position.x+PM.REBELS_SPEED[this.gang.level], this._position.y));
 			}else{
+				this.gang.world.updateScore(10);
 				this.jump();
 			}
 			
@@ -155,8 +169,9 @@ var EarlRebel = BaseRebel.extend({
 	update: function(){
 	
 		if(this.live){
-			this.setPosition(cc.ccp(this._position.x+5, this._position.y));
+			this.setPosition(cc.ccp(this._position.x+PM.REBELS_SPEED[this.gang.level], this._position.y));
 			if(this._position.x > 494){
+				this.gang.world.updateScore(12);
 				this.jump(180);
 			}
 		}
@@ -209,14 +224,22 @@ EarlRebel.create = function (spriteFrameName) {
 
 var BottleRebel = BaseRebel.extend({
 
+	scoreGiven: false,
+
 	update: function(){
 		if(this.live){
 			this._rotation += 10;
-			this.setPosition(cc.ccp(this._position.x+5, this._position.y));
+			this.setPosition(cc.ccp(this._position.x+PM.REBELS_SPEED[this.gang.level], this._position.y));
+		}
+		
+		if(this.getPosition().x > 494 && !this.scoreGiven){
+			this.scoreGiven = true;
+			this.gang.world.updateScore(8);
 		}
 		
 		if(this.getPosition().x > 800){
 			this._parent.removeChild(this);
+			
 		}
 		
 	},

@@ -16,11 +16,26 @@
 		<meta charset="utf-8">
 		<title>Pirate Mutiny</title>
 		<link rel="icon" type="image/GIF" href="http://tsubasa.com.br/blog/wp-content/themes/pixelpower/favicon.gif"/>
+		<style>
+		
+			#rules, #game{
+	    		margin: 20px 0px 0px 0px;
+	    	}
+		
+		</style>
 	</head>
-	<body style="padding:0; margin: 0; background: #333;">
-		<div style="text-align: center; font-size: 0">
-			<canvas id="gameCanvas" width="640" height="480" style="margin: 10px; background: #000;"></canvas>
-		</div>
+	<body style="padding:0; margin: 0; background: #000;">
+		
+		
+		<center>
+		    <div id="game">
+		    	<canvas id="gameCanvas" width="640" height="480" style="margin: 10px; background: #000;"></canvas>
+		    </div>
+		    <div id="rules"> 
+		    	<img src="Resources/web_piratemutiny_controls.png"/>
+		    </div> 
+		</center>
+		
 	</body>
 	
 	<script src="cocos2d.js"></script>	

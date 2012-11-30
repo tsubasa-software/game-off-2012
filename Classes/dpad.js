@@ -6,30 +6,6 @@ dpad.stateKeyPressed	= 2;
 dpad.stateKeyUp 		= 3;
 
 dpad.keys = {
-	actionUp:{
-		state: 0,
-		next: 0,
-		dirty: false,
-		bindingCode: 73,
-	},
-	actionDown:{
-		state: 0,
-		next: 0,
-		dirty: false,
-		bindingCode: 75,
-	},
-	actionRight:{
-		state: 0,
-		next: 0,
-		dirty: false,
-		bindingCode: 76,
-	},
-	actionLeft:{
-		state: 0,
-		next: 0,
-		dirty: false,
-		bindingCode: 74,
-	},
 	up:{
 		state: 0,
 		next: 0,
