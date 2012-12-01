@@ -12,7 +12,7 @@ cc.AppDelegate = cc.Application.extend({
     applicationDidFinishLaunching:function () {
     
         var director = cc.Director.sharedDirector();
-        director.setDisplayFPS(true);
+        director.setDisplayFPS(false);
         director.setAnimationInterval(1.0/32.0);
         
         var spriteCache = cc.SpriteFrameCache.sharedSpriteFrameCache();
