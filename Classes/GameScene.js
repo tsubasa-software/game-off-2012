@@ -83,9 +83,8 @@ var GameScene = cc.Layer.extend({
         this.schedule(this.update);
         this.setPosition(cc.ccp(-size.width, 0));
         
-        var canvasTag = cc.$('gameCanvas');
         var self = this;
-        gameCanvas.onmouseup = function(){
+        window.onmouseup = function(){
 	        self.changeState(PM.GAME_SCENE.GAME);
 	        if(self.state == PM.GAME_SCENE.GAMEOVER){
 	        	window.location.reload();
@@ -150,7 +149,8 @@ var GameScene = cc.Layer.extend({
     		
     		this.state = PM.GAME_SCENE.GAME2GAMEOVER;
     		this.gameOverLayer.totalScore = this.score;
-    		
+    		this.gameOverLayer.updateScore();
+			
     		var wait		= cc.DelayTime.create(1.0);
     		var move		= cc.EaseSineInOut.create(cc.MoveTo.create(0.8, cc.ccp(0,0)));
     		var onFadeEnd 	= cc.CallFunc.create(this, function () {
@@ -202,21 +202,64 @@ var GameOverLayer = cc.LayerColor.extend({
 	
 	totalScore: 0,
 	
+	updateScore: function(){
+	
+		var localHiScore = 0;
+		
+		if(localStorage){
+			if(localStorage.hiscore){
+				if(localStorage.hiscore > this.totalScore){
+					localHiScore = localStorage.hiscore;
+				}else{
+					localStorage.hiscore = this.totalScore;
+					localHiScore = localStorage.hiscore;
+				}
+			}else{
+				localStorage.hiscore = this.totalScore;
+				localHiScore = localStorage.hiscore;
+			}
+		}else{
+			localHiScore = this.totalScore;
+		}
+		
+		this.scoreLabel.setString("THIS SESSION SCORE: "+this.totalScore);
+		this.hiscoreLabel.setString("LOCAL HI-SCORE: "+localHiScore);
+		
+	},
+	
 	setup: function() {
 
 		var size = cc.Director.sharedDirector().getWinSize();
 		
-	   //LOGO AND INFO
-   	this.gameLogo = new GameLogo();
-   	this.gameLogo.setPosition(cc.ccp(size.width/2, 380));
-   	this.addChild(this.gameLogo);
+		//LOGO AND INFO
+		this.gameLogo = new GameLogo();
+		this.gameLogo.setPosition(cc.ccp(size.width/2, 380));
+		this.addChild(this.gameLogo);
    	
-		this.scoreLabel = cc.LabelBMFont.create("THIS SESSION SCORE: "+totalScore, "Resources/derp.fnt");
+		this.scoreLabel = cc.LabelBMFont.create("THIS SESSION SCORE: "+this.totalScore, "Resources/derp.fnt");
 		this.scoreLabel.setPosition(cc.ccp(130, 200+30));
 		this.scoreLabel.setAnchorPoint(cc.ccp(0,0));
 		this.addChild(this.scoreLabel);
+		
+		var localHiScore = 0;
+		
+		if(localStorage){
+			if(localStorage.hiscore){
+				if(localStorage.hiscore > this.totalScore){
+					localHiScore = localStorage.hiscore;
+				}else{
+					localStorage.hiscore = this.totalScore;
+					localHiScore = localStorage.hiscore;
+				}
+			}else{
+				localStorage.hiscore = this.totalScore;
+				localHiScore = localStorage.hiscore;
+			}
+		}else{
+			localHiScore = this.totalScore;
+		}
    	 		   	
-		this.hiscoreLabel = cc.LabelBMFont.create("LOCAL HI-SCORE: 18230", "Resources/derp.fnt");
+		this.hiscoreLabel = cc.LabelBMFont.create("LOCAL HI-SCORE: "+localHiScore, "Resources/derp.fnt");
 		this.hiscoreLabel.setPosition(cc.ccp(130, 175+30));
 		this.hiscoreLabel.setAnchorPoint(cc.ccp(0,0));
 		this.addChild(this.hiscoreLabel);
